@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: hmdp-backend
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:mysql://${HMDP_DB_HOST:127.0.0.1}:${HMDP_DB_PORT:3306}/${HMDP_DB_NAME:hmdp}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ${HMDP_DB_USERNAME:root}
+    password: ${HMDP_DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: ${HMDP_REDIS_HOST:127.0.0.1}
+      port: ${HMDP_REDIS_PORT:6379}
+      password: ${HMDP_REDIS_PASSWORD:}
+      database: ${HMDP_REDIS_DB:0}
+      timeout: 3s
+  jackson:
+    default-property-inclusion: non_null
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:sql/schema.sql
+      data-locations: classpath:sql/data.sql
+
+server:
+  port: ${HMDP_SERVER_PORT:8080}
+  servlet:
+    context-path: /api
+
+mybatis-plus:
+  type-aliases-package: com.hmdp.entity
+  mapper-locations: classpath*:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+app:
+  auth:
+    token-header: authorization
+    token-prefix: Bearer
+    token-ttl-minutes: 30
+    refresh-threshold-minutes: 10
+    public-paths:
+      - /auth/code
+      - /auth/login
+      - /shops
+      - /shops/*
+      - /shops/nearby
+      - /vouchers/seckill
+      - /blogs/feed
+      - /blogs/hot
+  sms:
+    provider: mock
+    sign-name: 本地生活
+    code-ttl-minutes: 5
+    code-length: 6
+  geo:
+    nearby-page-size: 10

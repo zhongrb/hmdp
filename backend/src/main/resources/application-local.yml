@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:mysql://${HMDP_DB_HOST:127.0.0.1}:${HMDP_DB_PORT:3306}/${HMDP_DB_NAME:hmdp}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ${HMDP_DB_USERNAME:root}
+    password: ${HMDP_DB_PASSWORD:root}
+  data:
+    redis:
+      host: ${HMDP_REDIS_HOST:127.0.0.1}
+      port: ${HMDP_REDIS_PORT:6379}
+      password: ${HMDP_REDIS_PASSWORD:}
+      database: ${HMDP_REDIS_DB:0}
+
+logging:
+  level:
+    com.hmdp: DEBUG
+
+app:
+  sms:
+    provider: mock
+    access-key: local-access-key
+    secret-key: local-secret-key
+    template-code: SMS_LOCAL_TEMPLATE

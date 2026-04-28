@@ -1,0 +1,39 @@
+# Java
+backend/target/
+*.class
+*.jar
+.gradle/
+build/
+
+# Node.js
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+coverage/
+playwright-report/
+test-results/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+.env.*
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
+
+# Local Claude artifacts
+.claude/worktrees/
+
+# Local Windows path artifact
+C:/

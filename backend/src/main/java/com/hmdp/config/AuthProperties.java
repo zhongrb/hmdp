@@ -1,0 +1,17 @@
+package com.hmdp.config;
+
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@Data
+@ConfigurationProperties(prefix = "app.auth")
+public class AuthProperties {
+
+    private String tokenHeader = "authorization";
+    private String tokenPrefix = "Bearer";
+    private long tokenTtlMinutes = 30;
+    private long refreshThresholdMinutes = 10;
+    private List<String> publicPaths = new ArrayList<>();
+}

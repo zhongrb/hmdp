@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\".specify/extensions/git/scripts/bash/create-new-feature.sh\" --json --short-name \"o2o-site\" \"构建一个本地生活 O2O 网站，支持8 大模块 短信登录 商户查询缓存 优惠券秒杀 附近商户 用户签到 / UV 统计 达人探店（发布笔记、滚动分页） 点赞 + 点赞排行 好友关注 + 共同关注\")",
+      "Bash(skill install *)",
+      "Bash(\"/bin/bash\" \"/root/zrb/hmdp/.specify/scripts/bash/setup-plan.sh\" --json)",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "Read(///wsl.localhost/ubuntu-22.04/root/zrb/hmdp/specs/**)",
+      "Bash(mkdir -p \"//wsl.localhost/ubuntu-22.04/root/zrb/hmdp/specs/001-o2o-site/contracts\")",
+      "Bash(wsl.exe bash *)",
+      "Bash(/bin/bash *)",
+      "Bash(./.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks)",
+      "Bash(mvn *)",
+      "Bash(npm *)",
+      "Bash(exit 42)"
+    ]
+  }
+}

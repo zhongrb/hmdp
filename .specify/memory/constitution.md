@@ -1,50 +1,104 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version change: template → 1.0.0
+- Modified principles:
+  - 占位原则 1 → I. 代码质量优先
+  - 占位原则 2 → II. 测试先行与防回归
+  - 占位原则 3 → III. 性能预算不可后补
+  - 占位原则 4 → IV. 中文一致性
+  - 占位原则 5 → V. 可验证的最小交付
+- Added sections:
+  - 附加约束
+  - 开发与验收流程
+- Removed sections:
+  - 无
+- Templates requiring updates:
+  - ✅ .specify/templates/plan-template.md
+  - ✅ .specify/templates/spec-template.md
+  - ✅ .specify/templates/tasks-template.md
+  - ✅ .specify/templates/checklist-template.md
+- Follow-up TODOs:
+  - 无
+-->
+# HMDP Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. 代码质量优先
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+所有变更 MUST 保持可读、可审查、可维护。提交前 MUST 通过格式化、
+静态检查与命名一致性要求。重复逻辑在第三次出现前 MUST 被消除。
+任何新增抽象 MUST 直接降低当前复杂度，禁止为假设性的未来需求设计。
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+理由：代码质量问题会在后续迭代中按复利放大，越晚处理，返工成本越高。
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### II. 测试先行与防回归
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+所有新功能、缺陷修复与行为变更 MUST 先定义可失败的验证方式，再进行实现。
+业务逻辑 MUST 具备自动化单元测试，跨模块行为 MUST 具备集成测试，
+外部契约变化 MUST 具备契约测试或端到端验证。任何已修复缺陷 MUST
+附带防回归测试。
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+理由：没有失败验证的实现无法证明需求被满足，也无法在后续迭代中稳定演进。
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### III. 性能预算不可后补
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+每个页面、接口和关键流程 MUST 在规格或计划阶段声明性能目标，并在交付前
+完成测量。默认要求如下：
+- 用户可感知的主要交互 MUST 保持流畅，不得引入可重复观察到的卡顿。
+- 服务端关键请求 MUST 定义 p95 延迟预算。
+- 批处理、查询或渲染任务 MUST 定义执行时间与内存上限。
+- 命中性能热点的变更 MUST 在任务中包含测量、优化与复验步骤。
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+理由：性能退化通常在集成后才集中暴露，必须把预算前置为设计约束。
+
+### IV. 中文一致性
+
+生成的网站、界面文案、帮助信息、默认示例内容与项目规范文档 MUST
+以中文为默认语言。保留英文术语时 MUST 不影响中文用户理解，并在全站保持
+术语一致。
+
+理由：项目的主要交付对象与维护文档均以中文为准，语言一致性能降低沟通与
+验收成本。
+
+### V. 可验证的最小交付
+
+每个需求切片 MUST 具备独立验收标准、明确输入输出与可演示结果。计划、
+任务与实现 MUST 以最小可用增量组织，禁止把多个不可独立验证的目标捆绑为
+单一步骤。任何复杂度、测试或性能例外 MUST 在计划中记录原因、替代方案与
+批准方式。
+
+理由：可验证的增量是控制风险、提高反馈速度的最小单位。
+
+## 附加约束
+
+- 用户可见文本、导航、表单提示、错误消息与空状态默认使用中文。
+- 合并前 MUST 提供测试证据、性能验证结果和必要的人工验收记录。
+- 未解决的已知回归、未解释的性能退化或无法重现的缺陷不得进入主分支。
+- 引入新依赖、新构建步骤或新基础设施时 MUST 说明其对质量、测试和性能的影响。
+
+## 开发与验收流程
+
+1. 规格阶段 MUST 明确用户场景、中文交互范围、可测需求和可量化成功标准。
+2. 计划阶段 MUST 完成宪章检查，列出代码质量门禁、测试策略、性能预算与验证方法。
+3. 实施阶段 MUST 先写失败的验证，再实现最小改动，并在本地完成自动化验证。
+4. 网站或前端变更 MUST 进行人工体验验证，至少覆盖主路径、一个边界场景和中文文案检查。
+5. 验收阶段 MUST 记录最终测试结果、性能结果、剩余风险和是否满足中文一致性要求。
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+本宪章高于项目中的临时约定与个人工作习惯。所有规格、计划、任务、代码评审与
+合并检查 MUST 以本宪章为准。
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+修订规则如下：
+- MAJOR：删除原则、重定义原则，或引入会改变既有治理方式的不兼容规则。
+- MINOR：新增原则、新增强制性章节，或显著扩展现有治理要求。
+- PATCH：澄清措辞、修正歧义、补充不改变治理含义的说明。
+
+合规审查规则如下：
+- 规格评审 MUST 检查中文交互、测试范围与性能目标是否完整。
+- 计划评审 MUST 检查是否存在违反宪章的复杂度例外，并记录理由。
+- 代码评审与合并前检查 MUST 验证测试、性能与人工验收记录是否齐全。
+- 任何违反本宪章的例外 MUST 在对应计划或评审记录中获得明确批准并可追溯。
+
+**Version**: 1.0.0 | **Ratified**: 2026-04-27 | **Last Amended**: 2026-04-27

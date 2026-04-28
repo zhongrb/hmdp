@@ -1,0 +1,99 @@
+CREATE TABLE IF NOT EXISTS tb_user (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    phone VARCHAR(11) NOT NULL,
+    password VARCHAR(128) NULL,
+    nick_name VARCHAR(64) NOT NULL,
+    icon VARCHAR(255) NULL,
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT uk_tb_user_phone UNIQUE (phone)
+);
+
+CREATE TABLE IF NOT EXISTS tb_shop_type (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(64) NOT NULL,
+    sort INT NOT NULL DEFAULT 0,
+    icon VARCHAR(255) NULL,
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS tb_shop (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(128) NOT NULL,
+    type_id BIGINT NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    x DECIMAL(10, 6) NOT NULL,
+    y DECIMAL(10, 6) NOT NULL,
+    images TEXT NULL,
+    avg_price DECIMAL(10, 2) NULL,
+    comments INT NOT NULL DEFAULT 0,
+    score DECIMAL(3, 2) NOT NULL DEFAULT 0,
+    open_hours VARCHAR(128) NULL,
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_tb_shop_type FOREIGN KEY (type_id) REFERENCES tb_shop_type (id)
+);
+
+CREATE TABLE IF NOT EXISTS tb_voucher (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    shop_id BIGINT NOT NULL,
+    title VARCHAR(128) NOT NULL,
+    sub_title VARCHAR(255) NOT NULL,
+    pay_value BIGINT NOT NULL,
+    actual_value BIGINT NOT NULL,
+    stock INT NOT NULL DEFAULT 0,
+    begin_time DATETIME NOT NULL,
+    end_time DATETIME NOT NULL,
+    status TINYINT NOT NULL DEFAULT 0,
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_tb_voucher_shop FOREIGN KEY (shop_id) REFERENCES tb_shop (id)
+);
+
+CREATE TABLE IF NOT EXISTS tb_voucher_order (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    voucher_id BIGINT NOT NULL,
+    status TINYINT NOT NULL DEFAULT 0,
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT uk_tb_voucher_order_user_voucher UNIQUE (user_id, voucher_id),
+    CONSTRAINT fk_tb_voucher_order_user FOREIGN KEY (user_id) REFERENCES tb_user (id),
+    CONSTRAINT fk_tb_voucher_order_voucher FOREIGN KEY (voucher_id) REFERENCES tb_voucher (id)
+);
+
+CREATE TABLE IF NOT EXISTS tb_blog (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    shop_id BIGINT NOT NULL,
+    title VARCHAR(128) NOT NULL,
+    content TEXT NOT NULL,
+    images TEXT NULL,
+    liked INT NOT NULL DEFAULT 0,
+    status TINYINT NOT NULL DEFAULT 1,
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_tb_blog_user FOREIGN KEY (user_id) REFERENCES tb_user (id),
+    CONSTRAINT fk_tb_blog_shop FOREIGN KEY (shop_id) REFERENCES tb_shop (id)
+);
+
+CREATE TABLE IF NOT EXISTS tb_blog_like (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    blog_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uk_tb_blog_like UNIQUE (blog_id, user_id),
+    CONSTRAINT fk_tb_blog_like_blog FOREIGN KEY (blog_id) REFERENCES tb_blog (id),
+    CONSTRAINT fk_tb_blog_like_user FOREIGN KEY (user_id) REFERENCES tb_user (id)
+);
+
+CREATE TABLE IF NOT EXISTS tb_follow (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    follow_user_id BIGINT NOT NULL,
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uk_tb_follow_user_target UNIQUE (user_id, follow_user_id),
+    CONSTRAINT fk_tb_follow_user FOREIGN KEY (user_id) REFERENCES tb_user (id),
+    CONSTRAINT fk_tb_follow_target FOREIGN KEY (follow_user_id) REFERENCES tb_user (id)
+);

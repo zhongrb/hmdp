@@ -1,0 +1,265 @@
+openapi: 3.0.3
+info:
+  title: HMDP O2O API
+  version: 0.1.0
+  description: 本地生活 O2O 网站首期接口契约
+servers:
+  - url: /api
+paths:
+  /auth/code:
+    post:
+      summary: 发送短信验证码
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phone]
+              properties:
+                phone:
+                  type: string
+      responses:
+        '200':
+          description: 发送成功
+        '400':
+          description: 手机号格式错误
+  /auth/login:
+    post:
+      summary: 短信验证码登录
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phone, code]
+              properties:
+                phone:
+                  type: string
+                code:
+                  type: string
+      responses:
+        '200':
+          description: 登录成功
+        '400':
+          description: 验证码无效或已过期
+  /shops:
+    get:
+      summary: 查询商户列表（匿名可访问）
+      parameters:
+        - in: query
+          name: typeId
+          schema:
+            type: integer
+        - in: query
+          name: page
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 查询成功
+  /shops/{shopId}:
+    get:
+      summary: 查询商户详情（匿名可访问）
+      parameters:
+        - in: path
+          name: shopId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 查询成功
+        '404':
+          description: 商户不存在
+  /shops/nearby:
+    get:
+      summary: 查询附近商户（匿名可访问）
+      parameters:
+        - in: query
+          name: typeId
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: x
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: y
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: current
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 查询成功
+  /vouchers/seckill:
+    get:
+      summary: 查询秒杀券活动列表（匿名可访问）
+      responses:
+        '200':
+          description: 查询成功
+  /vouchers/seckill/{voucherId}/claim:
+    post:
+      summary: 抢购秒杀券（需登录）
+      security:
+        - tokenAuth: []
+      parameters:
+        - in: path
+          name: voucherId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 抢购成功
+        '400':
+          description: 库存不足、活动未开始、已结束或重复领取
+        '401':
+          description: 未登录
+  /sign:
+    post:
+      summary: 每日签到（需登录）
+      security:
+        - tokenAuth: []
+      responses:
+        '200':
+          description: 签到成功
+        '400':
+          description: 当日已签到
+        '401':
+          description: 未登录
+  /sign/streak:
+    get:
+      summary: 查询连续签到天数（需登录）
+      security:
+        - tokenAuth: []
+      responses:
+        '200':
+          description: 查询成功
+        '401':
+          description: 未登录
+  /blogs:
+    post:
+      summary: 发布探店笔记（需登录）
+      security:
+        - tokenAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, content, shopId]
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                shopId:
+                  type: integer
+                images:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: 发布成功
+        '401':
+          description: 未登录
+  /blogs/feed:
+    get:
+      summary: 滚动分页查询内容流（匿名可访问）
+      parameters:
+        - in: query
+          name: lastId
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 查询成功
+  /blogs/{blogId}/like:
+    post:
+      summary: 点赞或取消点赞（需登录）
+      security:
+        - tokenAuth: []
+      parameters:
+        - in: path
+          name: blogId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 操作成功
+        '401':
+          description: 未登录
+  /blogs/hot:
+    get:
+      summary: 查询点赞排行（匿名可访问）
+      responses:
+        '200':
+          description: 查询成功
+  /follows/{targetUserId}:
+    post:
+      summary: 关注用户（需登录）
+      security:
+        - tokenAuth: []
+      parameters:
+        - in: path
+          name: targetUserId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 关注成功
+        '401':
+          description: 未登录
+    delete:
+      summary: 取消关注用户（需登录）
+      security:
+        - tokenAuth: []
+      parameters:
+        - in: path
+          name: targetUserId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 取消成功
+        '401':
+          description: 未登录
+  /follows/common/{targetUserId}:
+    get:
+      summary: 查询共同关注（需登录）
+      security:
+        - tokenAuth: []
+      parameters:
+        - in: path
+          name: targetUserId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 查询成功
+        '401':
+          description: 未登录
+components:
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: authorization

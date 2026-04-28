@@ -23,15 +23,19 @@
 **Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
 **Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
 **Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
+**Performance Goals**: [Must include measurable latency, throughput, render, or runtime targets]  
+**Constraints**: [Must include memory, compatibility, localization, or operational limits]  
 **Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- **代码质量优先**: 是否定义了格式化、静态检查、命名一致性与复杂度控制方式？
+- **测试先行与防回归**: 是否先定义失败验证、单元测试、集成测试与必要契约测试？
+- **性能预算不可后补**: 是否为关键页面、接口或流程定义了可测性能预算与验证方法？
+- **中文一致性**: 是否明确中文界面、网站文案、帮助信息与默认示例的覆盖范围？
+- **可验证的最小交付**: 是否将工作拆分为可独立验收的最小增量，并记录任何例外？
 
 ## Project Structure
 
@@ -100,5 +104,5 @@ directories captured above]
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+| [e.g., extra abstraction] | [current need] | [why simpler structure is insufficient] |
+| [e.g., temporary performance tradeoff] | [specific constraint] | [why compliant option is deferred] |

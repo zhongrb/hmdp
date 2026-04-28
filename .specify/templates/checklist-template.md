@@ -9,28 +9,34 @@
 <!-- 
   ============================================================================
   IMPORTANT: The checklist items below are SAMPLE ITEMS for illustration only.
-  
+
   The /speckit-checklist command MUST replace these with actual items based on:
   - User's specific checklist request
   - Feature requirements from spec.md
   - Technical context from plan.md
   - Implementation details from tasks.md
-  
+
   DO NOT keep these sample items in the generated checklist file.
   ============================================================================
 -->
 
-## [Category 1]
+## 代码质量
 
-- [ ] CHK001 First checklist item with clear action
-- [ ] CHK002 Second checklist item
-- [ ] CHK003 Third checklist item
+- [ ] CHK001 已通过格式化、静态检查和命名一致性检查
+- [ ] CHK002 未引入不必要抽象或重复逻辑
+- [ ] CHK003 变更范围与需求保持最小且可审查
 
-## [Category 2]
+## 测试与回归
 
-- [ ] CHK004 Another category item
-- [ ] CHK005 Item with specific criteria
-- [ ] CHK006 Final item in this category
+- [ ] CHK004 已定义并执行自动化测试
+- [ ] CHK005 缺陷修复已包含防回归验证
+- [ ] CHK006 关键用户路径已完成人工验收或集成验证
+
+## 性能与中文一致性
+
+- [ ] CHK007 已验证关键性能预算并记录结果
+- [ ] CHK008 网站与用户可见默认内容使用中文
+- [ ] CHK009 中文术语、错误提示、空状态和帮助信息保持一致
 
 ## Notes
 
