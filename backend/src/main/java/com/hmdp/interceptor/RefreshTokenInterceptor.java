@@ -30,6 +30,7 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
 
         String tokenKey = RedisConstants.LOGIN_TOKEN_KEY + token;
         Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(tokenKey);
+        // 刷新拦截器只负责“有 token 就尝试续期”，无效或过期 token 直接放行，由后续登录校验拦截器决定是否拒绝。
         if (entries.isEmpty()) {
             return true;
         }
@@ -40,6 +41,7 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
                 .icon((String) entries.get("icon"))
                 .build();
         UserHolder.saveUser(user);
+        // 只有识别到有效登录态时才续期，避免匿名请求把无效 token 一直刷新下去。
         stringRedisTemplate.expire(tokenKey, Duration.ofMinutes(authProperties.getTokenTtlMinutes()));
         return true;
     }

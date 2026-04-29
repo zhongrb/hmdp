@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
+import './assets/app.css'
 import { installRouterGuards } from './router/guards'
 import { routes } from './router/routes'
 

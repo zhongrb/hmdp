@@ -82,7 +82,7 @@
 <!--
   ACTION REQUIRED:
   - Requirements MUST be specific, testable, and implementation-independent.
-  - Include quality, testing, performance, and Chinese-language expectations where relevant.
+  - Include quality, testing, performance, Chinese-language expectations, and any required Chinese comments/logging obligations where relevant.
 -->
 
 ### Functional Requirements
@@ -95,11 +95,12 @@
 - **FR-006**: System MUST define how the change will be verified with automated tests.
 - **FR-007**: System MUST define measurable performance expectations for primary flows.
 - **FR-008**: System MUST present website and user-facing default content in Chinese.
+- **FR-009**: System MUST define where necessary Chinese code comments and key business or troubleshooting logs are required.
 
 *Example of marking unclear requirements:*
 
-- **FR-009**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-010**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- **FR-010**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
+- **FR-011**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
 ### Key Entities *(include if feature involves data)*
 

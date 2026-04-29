@@ -23,8 +23,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // 先执行刷新拦截器，让所有请求都有机会解析 token 并写入 UserHolder。
         registry.addInterceptor(refreshTokenInterceptor).addPathPatterns("/**");
 
+        // 登录拦截器只拦需要鉴权的路径，公开浏览接口通过 publicPaths 放行。
         registry.addInterceptor(loginInterceptor)
                 .excludePathPatterns(authProperties.getPublicPaths())
                 .excludePathPatterns(DEFAULT_EXCLUDE_PATHS);

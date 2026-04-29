@@ -23,10 +23,10 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-- **代码质量优先**: PASS。后端使用统一分层（controller/service/repository/mapper）、Spotless/Checkstyle 风格约束、MyBatis-Plus 负责通用 CRUD、复杂查询仅保留在少量 mapper XML；前端使用 ESLint + Prettier，避免重复请求与重复状态管理。
+- **代码质量优先**: PASS。后端使用统一分层（controller/service/repository/mapper）、Spotless/Checkstyle 风格约束、MyBatis-Plus 负责通用 CRUD、复杂查询仅保留在少量 mapper XML；前端使用 ESLint + Prettier，避免重复请求与重复状态管理；关键业务流程补充必要中文注释与便于排障的中文日志。
 - **测试先行与防回归**: PASS。每个核心流程先定义失败场景；后端为匿名浏览、登录、秒杀、防重、签到、共同关注、滚动分页提供单元/集成测试；前端为匿名浏览、登录、附近商户、抢券、笔记发布与点赞提供组件/E2E 验证。
 - **性能预算不可后补**: PASS。已为商户查询、缓存命中、秒杀、互动接口、滚动分页定义 p95 预算，并要求在实现阶段补充压测与复验记录。
-- **中文一致性**: PASS。默认页面文案、错误提示、空状态、帮助信息、表单提示全部使用中文，接口错误消息也统一中文化。
+- **中文一致性**: PASS。默认页面文案、错误提示、空状态、帮助信息、表单提示全部使用中文，接口错误消息也统一中文化，新增注释与关键日志默认使用中文。
 - **可验证的最小交付**: PASS。按三段增量拆分：认证与商户、运营与活跃、内容与社交；每段均有独立输入输出、自动化验证与人工验收主路径。
 
 ## Project Structure
@@ -109,10 +109,10 @@ deploy/
 
 ## Post-Design Constitution Check
 
-- **代码质量优先**: PASS。已明确后端/前端目录边界、静态检查与复杂查询落点。
+- **代码质量优先**: PASS。已明确后端/前端目录边界、静态检查、复杂查询落点，以及需补充中文注释与关键日志的业务区域。
 - **测试先行与防回归**: PASS。已将失败场景、集成测试、契约测试与前端 E2E 纳入交付范围。
 - **性能预算不可后补**: PASS。缓存、GEO、Lua、Bitmap、HyperLogLog、ZSet/Set 的使用都与性能目标直接对应。
-- **中文一致性**: PASS。契约与快速验收均要求中文默认文案与错误提示。
+- **中文一致性**: PASS。契约、快速验收、必要注释与关键日志均要求以中文为默认表达。
 - **可验证的最小交付**: PASS。三个增量阶段均可独立演示，无需等待全部模块完成。
 
 ## Complexity Tracking

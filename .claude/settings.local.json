@@ -12,7 +12,13 @@
       "Bash(./.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks)",
       "Bash(mvn *)",
       "Bash(npm *)",
-      "Bash(exit 42)"
+      "Bash(exit 42)",
+      "Bash(bash *)",
+      "Bash(GIT_BRANCH_NAME=\"001-o2o-site\" bash *)",
+      "Bash(cmd.exe *)",
+      "Bash(powershell.exe *)",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh *)",
+      "Bash(python *)"
     ]
   }
 }

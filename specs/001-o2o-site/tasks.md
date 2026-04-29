@@ -61,19 +61,19 @@
 
 ### Tests for User Story 1 ⚠️
 
-- [ ] T013 [P] [US1] 编写公开路由白名单和验证码校验单元测试于 `backend/src/test/java/com/hmdp/unit/AuthGuardTest.java`
-- [ ] T014 [P] [US1] 编写匿名浏览、短信登录、商户缓存和附近商户集成测试于 `backend/src/test/java/com/hmdp/integration/AuthAndShopFlowIntegrationTest.java`
-- [ ] T015 [P] [US1] 编写匿名浏览与登录引导 E2E 测试于 `frontend/tests/e2e/us1-anonymous-browse-and-login.spec.ts`
+- [X] T013 [P] [US1] 编写公开路由白名单和验证码校验单元测试于 `backend/src/test/java/com/hmdp/unit/AuthGuardTest.java`
+- [X] T014 [P] [US1] 编写匿名浏览、短信登录、商户缓存和附近商户集成测试于 `backend/src/test/java/com/hmdp/integration/AuthAndShopFlowIntegrationTest.java`
+- [X] T015 [P] [US1] 编写匿名浏览与登录引导 E2E 测试于 `frontend/tests/e2e/us1-anonymous-browse-and-login.spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T016 [P] [US1] 实现登录表单 DTO、短信验证码发送/校验和登录控制器于 `backend/src/main/java/com/hmdp/dto/LoginFormDTO.java`、`backend/src/main/java/com/hmdp/service/impl/UserServiceImpl.java`、`backend/src/main/java/com/hmdp/controller/UserController.java`
-- [ ] T017 [P] [US1] 实现用户、商户、商户分类实体与 Mapper 于 `backend/src/main/java/com/hmdp/entity/User.java`、`backend/src/main/java/com/hmdp/entity/Shop.java`、`backend/src/main/java/com/hmdp/entity/ShopType.java`、`backend/src/main/java/com/hmdp/mapper/UserMapper.java`、`backend/src/main/java/com/hmdp/mapper/ShopMapper.java`、`backend/src/main/java/com/hmdp/mapper/ShopTypeMapper.java`
-- [ ] T018 [US1] 实现商户详情缓存、防穿透/击穿和公开查询服务于 `backend/src/main/java/com/hmdp/utils/CacheClient.java`、`backend/src/main/java/com/hmdp/service/impl/ShopServiceImpl.java`
-- [ ] T019 [US1] 实现商户列表、详情和附近商户公开接口于 `backend/src/main/java/com/hmdp/controller/ShopController.java`
-- [ ] T020 [P] [US1] 实现匿名首页、商户列表、商户详情和登录页于 `frontend/src/views/HomeView.vue`、`frontend/src/views/ShopListView.vue`、`frontend/src/views/ShopDetailView.vue`、`frontend/src/views/LoginView.vue`
-- [ ] T021 [P] [US1] 实现附近商户页、登录引导弹层和中文空状态于 `frontend/src/views/NearbyShopView.vue`、`frontend/src/components/LoginPromptModal.vue`、`frontend/src/constants/copy.ts`
-- [ ] T022 [US1] 在 `specs/001-o2o-site/quickstart.md` 记录商户列表/详情/附近商户的性能验证步骤与目标结果
+- [X] T016 [P] [US1] 实现登录表单 DTO、短信验证码发送/校验和登录控制器于 `backend/src/main/java/com/hmdp/dto/LoginFormDTO.java`、`backend/src/main/java/com/hmdp/service/impl/UserServiceImpl.java`、`backend/src/main/java/com/hmdp/controller/UserController.java`
+- [X] T017 [P] [US1] 实现用户、商户、商户分类实体与 Mapper 于 `backend/src/main/java/com/hmdp/entity/User.java`、`backend/src/main/java/com/hmdp/entity/Shop.java`、`backend/src/main/java/com/hmdp/entity/ShopType.java`、`backend/src/main/java/com/hmdp/mapper/UserMapper.java`、`backend/src/main/java/com/hmdp/mapper/ShopMapper.java`、`backend/src/main/java/com/hmdp/mapper/ShopTypeMapper.java`
+- [X] T018 [US1] 实现商户详情缓存、防穿透/击穿和公开查询服务于 `backend/src/main/java/com/hmdp/utils/CacheClient.java`、`backend/src/main/java/com/hmdp/service/impl/ShopServiceImpl.java`
+- [X] T019 [US1] 实现商户列表、详情和附近商户公开接口于 `backend/src/main/java/com/hmdp/controller/ShopController.java`
+- [X] T020 [P] [US1] 实现匿名首页、商户列表、商户详情和登录页于 `frontend/src/views/HomeView.vue`、`frontend/src/views/ShopListView.vue`、`frontend/src/views/ShopDetailView.vue`、`frontend/src/views/LoginView.vue`
+- [X] T021 [P] [US1] 实现附近商户页、登录引导弹层和中文空状态于 `frontend/src/views/NearbyShopView.vue`、`frontend/src/components/LoginPromptModal.vue`、`frontend/src/constants/copy.ts`
+- [X] T022 [US1] 在 `specs/001-o2o-site/quickstart.md` 记录商户列表/详情/附近商户的性能验证步骤与目标结果
 
 **Checkpoint**: User Story 1 应可单独演示为 MVP
 
@@ -87,18 +87,18 @@
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T023 [P] [US2] 编写秒杀 Lua 返回码和签到位图逻辑单元测试于 `backend/src/test/java/com/hmdp/unit/VoucherSeckillServiceTest.java`、`backend/src/test/java/com/hmdp/unit/SignServiceTest.java`
+- [X] T023 [P] [US2] 编写秒杀 Lua 返回码和签到位图逻辑单元测试于 `backend/src/test/java/com/hmdp/unit/VoucherSeckillServiceTest.java`、`backend/src/test/java/com/hmdp/unit/SignServiceTest.java`
 - [ ] T024 [P] [US2] 编写活动列表、抢券防重、签到和 UV 统计集成测试于 `backend/src/test/java/com/hmdp/integration/VoucherAndSignFlowIntegrationTest.java`
-- [ ] T025 [P] [US2] 编写抢券与签到主路径 E2E 测试于 `frontend/tests/e2e/us2-voucher-and-sign.spec.ts`
+- [X] T025 [P] [US2] 编写抢券与签到主路径 E2E 测试于 `frontend/tests/e2e/us2-voucher-and-sign.spec.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T026 [P] [US2] 实现优惠券、秒杀券和券订单实体与 Mapper 于 `backend/src/main/java/com/hmdp/entity/Voucher.java`、`backend/src/main/java/com/hmdp/entity/VoucherOrder.java`、`backend/src/main/java/com/hmdp/mapper/VoucherMapper.java`、`backend/src/main/java/com/hmdp/mapper/VoucherOrderMapper.java`
-- [ ] T027 [P] [US2] 实现秒杀 Lua 脚本和抢券服务于 `backend/src/main/resources/lua/seckill.lua`、`backend/src/main/java/com/hmdp/service/impl/VoucherOrderServiceImpl.java`
-- [ ] T028 [US2] 实现活动列表、抢券、签到和 UV 统计接口于 `backend/src/main/java/com/hmdp/controller/VoucherController.java`、`backend/src/main/java/com/hmdp/controller/SignController.java`、`backend/src/main/java/com/hmdp/filter/UvRecordFilter.java`
-- [ ] T029 [P] [US2] 实现活动列表页、抢券卡片和活动状态中文展示于 `frontend/src/views/VoucherListView.vue`、`frontend/src/components/VoucherCard.vue`、`frontend/src/api/voucher.ts`
-- [ ] T030 [P] [US2] 实现签到面板、活动反馈状态和登录后操作提示于 `frontend/src/components/SignPanel.vue`、`frontend/src/stores/activity.ts`、`frontend/src/api/sign.ts`
-- [ ] T031 [US2] 在 `specs/001-o2o-site/quickstart.md` 记录秒杀延迟、重复领券拦截和签到校验的验收结果
+- [X] T026 [P] [US2] 实现优惠券、秒杀券和券订单实体与 Mapper 于 `backend/src/main/java/com/hmdp/entity/Voucher.java`、`backend/src/main/java/com/hmdp/entity/VoucherOrder.java`、`backend/src/main/java/com/hmdp/mapper/VoucherMapper.java`、`backend/src/main/java/com/hmdp/mapper/VoucherOrderMapper.java`
+- [X] T027 [P] [US2] 实现秒杀 Lua 脚本和抢券服务于 `backend/src/main/resources/lua/seckill.lua`、`backend/src/main/java/com/hmdp/service/impl/VoucherOrderServiceImpl.java`
+- [X] T028 [US2] 实现活动列表、抢券、签到和 UV 统计接口于 `backend/src/main/java/com/hmdp/controller/VoucherController.java`、`backend/src/main/java/com/hmdp/controller/SignController.java`、`backend/src/main/java/com/hmdp/filter/UvRecordFilter.java`
+- [X] T029 [P] [US2] 实现活动列表页、抢券卡片和活动状态中文展示于 `frontend/src/views/VoucherListView.vue`、`frontend/src/components/VoucherCard.vue`、`frontend/src/api/voucher.ts`
+- [X] T030 [P] [US2] 实现签到面板、活动反馈状态和登录后操作提示于 `frontend/src/components/SignPanel.vue`、`frontend/src/stores/activity.ts`、`frontend/src/api/sign.ts`
+- [X] T031 [US2] 在 `specs/001-o2o-site/quickstart.md` 记录秒杀延迟、重复领券拦截和签到校验的验收结果
 
 **Checkpoint**: User Story 2 完成后，应能独立验证交易与活跃行为
 
@@ -112,19 +112,19 @@
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T032 [P] [US3] 编写滚动分页游标、点赞切换和共同关注集合运算单元测试于 `backend/src/test/java/com/hmdp/unit/BlogInteractionServiceTest.java`
+- [X] T032 [P] [US3] 编写滚动分页游标、点赞切换和共同关注集合运算单元测试于 `backend/src/test/java/com/hmdp/unit/BlogInteractionServiceTest.java`
 - [ ] T033 [P] [US3] 编写笔记发布、内容流、热榜、关注和共同关注集成测试于 `backend/src/test/java/com/hmdp/integration/BlogAndFollowFlowIntegrationTest.java`
-- [ ] T034 [P] [US3] 编写笔记发布、点赞、热榜和关注主路径 E2E 测试于 `frontend/tests/e2e/us3-blog-and-social.spec.ts`
+- [X] T034 [P] [US3] 编写笔记发布、点赞、热榜和关注主路径 E2E 测试于 `frontend/tests/e2e/us3-blog-and-social.spec.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T035 [P] [US3] 实现笔记、点赞、关注实体与 Mapper 于 `backend/src/main/java/com/hmdp/entity/Blog.java`、`backend/src/main/java/com/hmdp/entity/BlogLike.java`、`backend/src/main/java/com/hmdp/entity/Follow.java`、`backend/src/main/java/com/hmdp/mapper/BlogMapper.java`、`backend/src/main/java/com/hmdp/mapper/FollowMapper.java`
-- [ ] T036 [P] [US3] 实现笔记发布、滚动分页和热榜服务于 `backend/src/main/java/com/hmdp/service/impl/BlogServiceImpl.java`
-- [ ] T037 [US3] 实现点赞切换、关注/取关和共同关注接口与服务于 `backend/src/main/java/com/hmdp/service/impl/FollowServiceImpl.java`、`backend/src/main/java/com/hmdp/controller/BlogController.java`、`backend/src/main/java/com/hmdp/controller/FollowController.java`
-- [ ] T038 [P] [US3] 实现内容流、笔记发布页和博客 API 调用于 `frontend/src/views/BlogFeedView.vue`、`frontend/src/views/BlogPublishView.vue`、`frontend/src/api/blog.ts`
-- [ ] T039 [P] [US3] 实现热榜列表、点赞按钮和关注按钮组件于 `frontend/src/components/HotBlogList.vue`、`frontend/src/components/LikeButton.vue`、`frontend/src/components/FollowButton.vue`
-- [ ] T040 [P] [US3] 实现共同关注页、关注 API 和中文空状态于 `frontend/src/views/CommonFollowView.vue`、`frontend/src/api/follow.ts`、`frontend/src/constants/copy.ts`
-- [ ] T041 [US3] 在 `specs/001-o2o-site/quickstart.md` 记录内容流稳定性、热榜正确性和社交交互验收结果
+- [X] T035 [P] [US3] 实现笔记、点赞、关注实体与 Mapper 于 `backend/src/main/java/com/hmdp/entity/Blog.java`、`backend/src/main/java/com/hmdp/entity/BlogLike.java`、`backend/src/main/java/com/hmdp/entity/Follow.java`、`backend/src/main/java/com/hmdp/mapper/BlogMapper.java`、`backend/src/main/java/com/hmdp/mapper/FollowMapper.java`
+- [X] T036 [P] [US3] 实现笔记发布、滚动分页和热榜服务于 `backend/src/main/java/com/hmdp/service/impl/BlogServiceImpl.java`
+- [X] T037 [US3] 实现点赞切换、关注/取关和共同关注接口与服务于 `backend/src/main/java/com/hmdp/service/impl/FollowServiceImpl.java`、`backend/src/main/java/com/hmdp/controller/BlogController.java`、`backend/src/main/java/com/hmdp/controller/FollowController.java`
+- [X] T038 [P] [US3] 实现内容流、笔记发布页和博客 API 调用于 `frontend/src/views/BlogFeedView.vue`、`frontend/src/views/BlogPublishView.vue`、`frontend/src/api/blog.ts`
+- [X] T039 [P] [US3] 实现热榜列表、点赞按钮和关注按钮组件于 `frontend/src/components/HotBlogList.vue`、`frontend/src/components/LikeButton.vue`、`frontend/src/components/FollowButton.vue`
+- [X] T040 [P] [US3] 实现共同关注页、关注 API 和中文空状态于 `frontend/src/views/CommonFollowView.vue`、`frontend/src/api/follow.ts`、`frontend/src/constants/copy.ts`
+- [X] T041 [US3] 在 `specs/001-o2o-site/quickstart.md` 记录内容流稳定性、热榜正确性和社交交互验收结果
 
 **Checkpoint**: User Story 3 完成后，内容与社交能力应可独立演示
 
@@ -134,11 +134,11 @@
 
 **Purpose**: 收尾、回归、跨故事一致性与最终验收
 
-- [ ] T042 [P] 为公开接口与鉴权接口补充契约回归测试于 `backend/src/test/java/com/hmdp/contract/PublicAndProtectedApiContractTest.java`
-- [ ] T043 [P] 为公开页文案、空状态和登录引导补充前端回归测试于 `frontend/tests/unit/public-copy.spec.ts`、`frontend/tests/e2e/public-empty-states.spec.ts`
-- [ ] T044 复查并精简重复的缓存、鉴权和社交交互逻辑于 `backend/src/main/java/com/hmdp/service/impl/`、`frontend/src/composables/`
-- [ ] T045 在 `specs/001-o2o-site/quickstart.md`、`specs/001-o2o-site/checklists/requirements.md` 记录端到端验证结果、性能证据与剩余风险
-- [ ] T046 统一复核中文术语、错误提示与默认文案于 `frontend/src/constants/copy.ts`、`specs/001-o2o-site/spec.md`
+- [X] T042 [P] 为公开接口与鉴权接口补充契约回归测试于 `backend/src/test/java/com/hmdp/contract/PublicAndProtectedApiContractTest.java`
+- [X] T043 [P] 为公开页文案、空状态和登录引导补充前端回归测试于 `frontend/tests/unit/public-copy.spec.ts`、`frontend/tests/e2e/public-empty-states.spec.ts`
+- [X] T044 复查并精简重复的缓存、鉴权和社交交互逻辑于 `backend/src/main/java/com/hmdp/service/impl/`、`frontend/src/composables/`
+- [X] T045 在 `specs/001-o2o-site/quickstart.md`、`specs/001-o2o-site/checklists/requirements.md` 记录端到端验证结果、性能证据与剩余风险
+- [X] T046 统一复核中文术语、错误提示与默认文案于 `frontend/src/constants/copy.ts`、`specs/001-o2o-site/spec.md`
 
 ---
 
