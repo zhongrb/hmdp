@@ -27,6 +27,7 @@ import org.springframework.data.redis.core.GeoOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.domain.geo.GeoReference;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -56,9 +57,9 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public Shop queryById(Long shopId) {
-        // 商户详情属于高频公开访问数据，优先走缓存穿透防护链路，避免热点详情持续打到数据库。
-        Shop shop = cacheClient.queryWithPassThrough(
+        Shop shop = cacheClient.queryWithLogicalExpire(
                 RedisConstants.CACHE_SHOP_KEY,
+                RedisConstants.LOCK_SHOP_KEY,
                 shopId,
                 Shop.class,
                 SHOP_CACHE_TTL,
@@ -71,6 +72,55 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
+    @Transactional
+    public Shop createShop(Shop shop) {
+        validateShop(shop);
+        shop.setId(null);
+        shopMapper.insert(shop);
+        try {
+            writeShopGeo(shop);
+            deleteShopCache(shop.getId());
+            log.info("商户新增成功，shopId={}, typeId={}", shop.getId(), shop.getTypeId());
+            return shop;
+        } catch (Exception exception) {
+            log.error("商户新增后的缓存或GEO维护失败，shopId={}", shop.getId(), exception);
+            throw new BizException("商户新增后缓存同步失败");
+        }
+    }
+
+    @Override
+    @Transactional
+    public Shop updateShop(Long shopId, Shop shop) {
+        Shop existing = requireShop(shopId);
+        applyUpdate(shopId, shop);
+        Shop updated = requireShop(shopId);
+        try {
+            refreshShopGeo(existing, updated);
+            deleteShopCache(shopId);
+            log.info("商户更新成功，shopId={}", shopId);
+            return updated;
+        } catch (Exception exception) {
+            log.error("商户更新后的缓存或GEO维护失败，shopId={}", shopId, exception);
+            throw new BizException("商户更新后缓存同步失败");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteShop(Long shopId) {
+        Shop existing = requireShop(shopId);
+        shopMapper.deleteById(shopId);
+        try {
+            removeShopGeo(existing);
+            deleteShopCache(shopId);
+            log.info("商户删除成功，shopId={}", shopId);
+        } catch (Exception exception) {
+            log.error("商户删除后的缓存或GEO清理失败，shopId={}", shopId, exception);
+            throw new BizException("商户删除后缓存同步失败");
+        }
+    }
+
+    @Override
     public List<Shop> queryNearby(Long typeId, BigDecimal x, BigDecimal y, int current) {
         if (typeId == null || x == null || y == null) {
             throw new BizException("附近商户查询参数不完整");
@@ -79,7 +129,6 @@ public class ShopServiceImpl implements ShopService {
         int pageSize = appProperties.getGeo().getNearbyPageSize();
         int from = (pageNo - 1) * pageSize;
         int end = from + pageSize;
-        // GEO 查询先取到当前页末尾，再在内存中截取当前页，保证距离排序与分页结果保持一致。
         GeoOperations<String, String> geoOperations = stringRedisTemplate.opsForGeo();
         RedisGeoCommands.GeoSearchCommandArgs args = RedisGeoCommands.GeoSearchCommandArgs.newGeoSearchArgs()
                 .includeDistance()
@@ -105,7 +154,6 @@ public class ShopServiceImpl implements ShopService {
         List<Shop> shops = shopMapper.selectBatchIds(shopIds);
         Map<Long, Shop> shopMap = shops.stream().collect(Collectors.toMap(Shop::getId, item -> item));
         List<Shop> ordered = new ArrayList<>();
-        // 批量查库返回顺序不保证与 GEO 结果一致，这里按 shopIds 重新组装，避免距离与商户顺序错位。
         for (Long shopId : shopIds) {
             Shop shop = shopMap.get(shopId);
             if (shop != null) {
@@ -115,5 +163,61 @@ public class ShopServiceImpl implements ShopService {
         }
         log.info("附近商户查询完成，typeId={}, count={}", typeId, ordered.size());
         return ordered;
+    }
+
+    private void validateShop(Shop shop) {
+        if (shop == null || shop.getTypeId() == null || shop.getName() == null || shop.getName().isBlank()
+                || shop.getAddress() == null || shop.getAddress().isBlank() || shop.getX() == null || shop.getY() == null) {
+            throw new BizException("商户参数不完整");
+        }
+    }
+
+    private Shop requireShop(Long shopId) {
+        Shop shop = shopMapper.selectById(shopId);
+        if (shop == null) {
+            throw new BizException("商户不存在");
+        }
+        return shop;
+    }
+
+    private void applyUpdate(Long shopId, Shop shop) {
+        validateShop(shop);
+        shop.setId(shopId);
+        shopMapper.updateById(shop);
+    }
+
+    private void refreshShopGeo(Shop oldShop, Shop newShop) {
+        if (!Objects.equals(oldShop.getTypeId(), newShop.getTypeId())) {
+            removeShopGeo(oldShop);
+            writeShopGeo(newShop);
+            log.info("商户GEO类型索引已迁移，shopId={}, oldTypeId={}, newTypeId={}", newShop.getId(), oldShop.getTypeId(), newShop.getTypeId());
+            return;
+        }
+        if (!Objects.equals(oldShop.getX(), newShop.getX()) || !Objects.equals(oldShop.getY(), newShop.getY())) {
+            writeShopGeo(newShop);
+            log.info("商户GEO坐标已更新，shopId={}", newShop.getId());
+        }
+    }
+
+    private void writeShopGeo(Shop shop) {
+        stringRedisTemplate.opsForGeo().add(
+                RedisConstants.SHOP_GEO_KEY + shop.getTypeId(),
+                new Point(shop.getX().doubleValue(), shop.getY().doubleValue()),
+                String.valueOf(shop.getId())
+        );
+        log.info("商户GEO索引写入完成，shopId={}, typeId={}", shop.getId(), shop.getTypeId());
+    }
+
+    private void removeShopGeo(Shop shop) {
+        stringRedisTemplate.opsForGeo().remove(
+                RedisConstants.SHOP_GEO_KEY + shop.getTypeId(),
+                String.valueOf(shop.getId())
+        );
+        log.info("商户GEO索引删除完成，shopId={}, typeId={}", shop.getId(), shop.getTypeId());
+    }
+
+    private void deleteShopCache(Long shopId) {
+        cacheClient.delete(RedisConstants.CACHE_SHOP_KEY + shopId);
+        log.info("商户详情缓存删除完成，shopId={}", shopId);
     }
 }

@@ -44,6 +44,7 @@
       :blogs="blogs"
       :loading-id="likeLoadingId"
       @toggle-like="toggleLike"
+      @open-shop="openShop"
     />
 
     <LoginPromptModal
@@ -101,6 +102,10 @@ async function toggleLike(blog: BlogCard) {
   } finally {
     likeLoadingId.value = null
   }
+}
+
+async function openShop(blog: BlogCard) {
+  await router.push({ name: 'shop-detail', params: { shopId: blog.shopId } })
 }
 
 async function goToLogin() {

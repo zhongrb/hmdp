@@ -22,7 +22,8 @@
       "Bash(openspec list *)",
       "Bash(openspec new *)",
       "Bash(mkdir -p \"openspec/changes/archive\")",
-      "Bash(mv \"openspec/changes/voucher-update\" \"openspec/changes/archive/2026-05-04-voucher-update\")"
+      "Bash(mv \"openspec/changes/voucher-update\" \"openspec/changes/archive/2026-05-04-voucher-update\")",
+      "Bash(cmd *)"
     ]
   }
 }

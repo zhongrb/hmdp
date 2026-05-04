@@ -96,7 +96,9 @@ public class BlogServiceImpl implements BlogService {
                 .eq(Blog::getStatus, 1)
                 .orderByDesc(Blog::getLiked)
                 .orderByDesc(Blog::getId));
-        return enrichCards(page.getRecords());
+        List<BlogCardDTO> cards = enrichCards(page.getRecords());
+        cards.sort(Comparator.comparing(BlogCardDTO::getLiked).reversed());
+        return cards;
     }
 
     @Override

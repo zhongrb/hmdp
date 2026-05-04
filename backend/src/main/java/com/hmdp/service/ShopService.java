@@ -10,5 +10,11 @@ public interface ShopService {
 
     Shop queryById(Long shopId);
 
+    Shop createShop(Shop shop);
+
+    Shop updateShop(Long shopId, Shop shop);
+
+    void deleteShop(Long shopId);
+
     List<Shop> queryNearby(Long typeId, BigDecimal x, BigDecimal y, int current);
 }

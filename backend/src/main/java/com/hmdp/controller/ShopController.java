@@ -5,14 +5,19 @@ import com.hmdp.entity.Shop;
 import com.hmdp.entity.ShopType;
 import com.hmdp.service.ShopService;
 import com.hmdp.service.ShopTypeService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +40,22 @@ public class ShopController {
     @GetMapping("/{shopId}")
     public Result<Shop> queryShopDetail(@PathVariable Long shopId) {
         return Result.ok(shopService.queryById(shopId));
+    }
+
+    @PostMapping
+    public Result<Shop> createShop(@Valid @RequestBody Shop shop) {
+        return Result.ok(shopService.createShop(shop));
+    }
+
+    @PutMapping("/{shopId}")
+    public Result<Shop> updateShop(@PathVariable Long shopId, @Valid @RequestBody Shop shop) {
+        return Result.ok(shopService.updateShop(shopId, shop));
+    }
+
+    @DeleteMapping("/{shopId}")
+    public Result<Void> deleteShop(@PathVariable Long shopId) {
+        shopService.deleteShop(shopId);
+        return Result.ok();
     }
 
     @GetMapping("/nearby")
