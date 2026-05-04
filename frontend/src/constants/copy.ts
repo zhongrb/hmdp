@@ -29,12 +29,12 @@ export const copy = {
     heroSubtitle: '先逛再决定，登录后即可抢券、签到和互动。',
     heroCtaPrimary: '开始浏览商户',
     heroCtaSecondary: '查看附近热门',
-    sectionTitle: '一站式本地生活入口',
-    sectionSubtitle: '从找店、看评价到领优惠，公开内容先看清楚，再决定是否登录参与。',
+    sectionTitle: '先看看今天去哪',
+    sectionSubtitle: '不知道吃什么、逛什么时，可以先看看商户、优惠和真实分享，再慢慢决定。',
     highlights: [
-      '公开商户与优惠信息，先了解再行动。',
-      '登录后可继续抢券、签到、发布与互动。',
-      '统一中文引导，减少陌生页面的理解成本。',
+      '先看商户和优惠信息，合适再进一步了解。',
+      '看到喜欢的活动后，登录就能继续领券、签到和互动。',
+      '多看看大家的真实探店内容，做选择会更有底。',
     ],
   },
   shops: {
@@ -139,8 +139,8 @@ export const copy = {
     signStreakSuffix: '天',
   },
   marketing: {
-    trustTitle: '先了解，再决定是否互动',
-    trustBody: '首页、商户、附近、优惠与热榜内容支持公开浏览，抢券、签到、发布与关注会在需要时再引导登录。',
+    trustTitle: '先看看，再决定要不要参与',
+    trustBody: '你可以先浏览首页、商户、附近、优惠和热榜内容；看到感兴趣的活动或内容后，再登录继续抢券、签到、发布和关注。',
   },
   errors: {
     network: '网络开小差了，请稍后重试。',

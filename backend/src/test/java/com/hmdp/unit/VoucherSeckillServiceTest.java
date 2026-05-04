@@ -1,5 +1,6 @@
 package com.hmdp.unit;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -8,16 +9,15 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.hmdp.dto.SeckillVoucherMessage;
 import com.hmdp.dto.UserDTO;
-import com.hmdp.entity.Voucher;
-import com.hmdp.entity.VoucherOrder;
 import com.hmdp.exception.BizException;
-import com.hmdp.mapper.VoucherMapper;
-import com.hmdp.mapper.VoucherOrderMapper;
+import com.hmdp.service.impl.VoucherOrderMessageSender;
 import com.hmdp.service.impl.VoucherOrderServiceImpl;
+import com.hmdp.service.impl.VoucherRedisPreheatService;
 import com.hmdp.utils.RedisConstants;
+import com.hmdp.utils.SnowflakeIdWorker;
 import com.hmdp.utils.UserHolder;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -25,8 +25,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
@@ -36,15 +34,13 @@ class VoucherSeckillServiceTest {
     @Mock
     private StringRedisTemplate stringRedisTemplate;
     @Mock
-    private VoucherMapper voucherMapper;
-    @Mock
-    private VoucherOrderMapper voucherOrderMapper;
-    @Mock
     private DefaultRedisScript<Long> seckillScript;
     @Mock
-    private RedissonClient redissonClient;
+    private SnowflakeIdWorker snowflakeIdWorker;
     @Mock
-    private RLock lock;
+    private VoucherOrderMessageSender voucherOrderMessageSender;
+    @Mock
+    private VoucherRedisPreheatService voucherRedisPreheatService;
 
     @InjectMocks
     private VoucherOrderServiceImpl voucherOrderService;
@@ -57,19 +53,23 @@ class VoucherSeckillServiceTest {
     @Test
     void shouldRejectWhenVoucherAlreadyClaimed() {
         UserHolder.saveUser(UserDTO.builder().id(1L).build());
-        when(stringRedisTemplate.execute(eq(seckillScript), anyList(), eq("1"), eq("1"))).thenReturn(2L);
+        when(voucherRedisPreheatService.ensureVoucherStock(1L)).thenReturn(true);
+        when(snowflakeIdWorker.nextId()).thenReturn(99L);
+        when(stringRedisTemplate.execute(eq(seckillScript), anyList(), eq("1"))).thenReturn(2L);
 
         assertThatThrownBy(() -> voucherOrderService.claimSeckillVoucher(1L))
                 .isInstanceOf(BizException.class)
                 .hasMessage("请勿重复领取同一张优惠券");
 
-        verify(voucherOrderMapper, never()).insert(any(VoucherOrder.class));
+        verify(voucherOrderMessageSender, never()).send(any(SeckillVoucherMessage.class));
     }
 
     @Test
     void shouldRejectWhenVoucherOutOfStock() {
         UserHolder.saveUser(UserDTO.builder().id(1L).build());
-        when(stringRedisTemplate.execute(eq(seckillScript), anyList(), eq("1"), eq("1"))).thenReturn(1L);
+        when(voucherRedisPreheatService.ensureVoucherStock(1L)).thenReturn(true);
+        when(snowflakeIdWorker.nextId()).thenReturn(99L);
+        when(stringRedisTemplate.execute(eq(seckillScript), anyList(), eq("1"))).thenReturn(1L);
 
         assertThatThrownBy(() -> voucherOrderService.claimSeckillVoucher(1L))
                 .isInstanceOf(BizException.class)
@@ -77,26 +77,32 @@ class VoucherSeckillServiceTest {
     }
 
     @Test
-    void shouldCreateOrderWhenLuaCheckPasses() {
+    void shouldSendMessageWhenLuaCheckPasses() {
         UserHolder.saveUser(UserDTO.builder().id(1L).build());
-        Voucher voucher = new Voucher();
-        voucher.setId(1L);
-        voucher.setStock(10);
-        voucher.setBeginTime(LocalDateTime.now().minusHours(1));
-        voucher.setEndTime(LocalDateTime.now().plusHours(1));
-        when(stringRedisTemplate.execute(eq(seckillScript), anyList(), eq("1"), eq("1"))).thenReturn(0L);
-        when(redissonClient.getLock("lock:order:1")).thenReturn(lock);
-        when(voucherOrderMapper.selectCount(any())).thenReturn(0L);
-        when(voucherMapper.selectById(1L)).thenReturn(voucher);
+        when(voucherRedisPreheatService.ensureVoucherStock(1L)).thenReturn(true);
+        when(snowflakeIdWorker.nextId()).thenReturn(123456L);
+        when(stringRedisTemplate.execute(eq(seckillScript), anyList(), eq("1"))).thenReturn(0L);
 
-        voucherOrderService.claimSeckillVoucher(1L);
+        Long orderId = voucherOrderService.claimSeckillVoucher(1L);
 
+        assertThat(orderId).isEqualTo(123456L);
         verify(stringRedisTemplate).execute(
                 eq(seckillScript),
                 eq(List.of(RedisConstants.SECKILL_STOCK_KEY + 1L, RedisConstants.SECKILL_ORDER_KEY + 1L)),
-                eq("1"),
                 eq("1")
         );
-        verify(voucherOrderMapper).insert(any(VoucherOrder.class));
+        verify(voucherOrderMessageSender).send(new SeckillVoucherMessage(123456L, 1L, 1L));
+    }
+
+    @Test
+    void shouldRejectWhenVoucherNotPreheated() {
+        UserHolder.saveUser(UserDTO.builder().id(2L).build());
+        when(voucherRedisPreheatService.ensureVoucherStock(2L)).thenReturn(false);
+
+        assertThatThrownBy(() -> voucherOrderService.claimSeckillVoucher(2L))
+                .isInstanceOf(BizException.class)
+                .hasMessage("活动尚未开始或已结束");
+
+        verify(stringRedisTemplate, never()).execute(any(), anyList(), any());
     }
 }

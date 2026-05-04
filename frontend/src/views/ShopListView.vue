@@ -3,7 +3,6 @@
     <section class="hero-card section-grid">
       <AppSectionHeader
         :title="copy.shops.listTitle"
-        :subtitle="copy.shops.browseHint"
         eyebrow="公开浏览"
       />
       <div

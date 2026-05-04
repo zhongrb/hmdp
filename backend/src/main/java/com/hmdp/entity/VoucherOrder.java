@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @TableName("tb_voucher_order")
 public class VoucherOrder extends BaseEntity {
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.INPUT)
     private Long id;
     private Long userId;
     private Long voucherId;

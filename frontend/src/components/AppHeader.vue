@@ -9,27 +9,31 @@
         <span class="brand__mark">H</span>
         <span class="brand__content">
           <strong>{{ copy.appName }}</strong>
-          <span>先浏览，再登录互动</span>
         </span>
       </RouterLink>
 
       <AppNavBar />
 
       <div class="app-header__actions">
-        <div
-          v-if="authStore.isAuthenticated && authStore.user"
-          class="user-badge"
-        >
-          <strong>{{ authStore.user.nickName }}</strong>
-          <span>已登录</span>
-        </div>
-        <BaseButton
-          v-if="authStore.isAuthenticated"
-          variant="secondary"
-          @click="logout"
-        >
-          退出登录
-        </BaseButton>
+        <template v-if="authStore.isAuthenticated && authStore.user">
+          <BaseButton
+            tag="button"
+            variant="secondary"
+            class="user-button"
+            @click="goToProfile"
+          >
+            <span class="user-button__content">
+              <strong>{{ authStore.user.nickName }}</strong>
+              <span>个人信息</span>
+            </span>
+          </BaseButton>
+          <BaseButton
+            variant="secondary"
+            @click="logout"
+          >
+            退出登录
+          </BaseButton>
+        </template>
         <BaseButton
           v-else
           tag="a"
@@ -51,6 +55,10 @@ import BaseButton from './BaseButton.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
+
+async function goToProfile() {
+  await router.push('/profile')
+}
 
 async function logout() {
   authStore.clearSession()
@@ -106,18 +114,11 @@ async function logout() {
 
 .brand__content {
   display: grid;
-  gap: 2px;
 }
 
 .brand__content strong {
   color: #020617;
   font-size: 1rem;
-}
-
-.brand__content span,
-.user-badge span {
-  color: #64748b;
-  font-size: 0.9rem;
 }
 
 .app-header__actions {
@@ -127,18 +128,25 @@ async function logout() {
   gap: 12px;
 }
 
-.user-badge {
-  min-height: 48px;
-  display: grid;
-  align-content: center;
-  padding: 0 14px;
-  border-radius: 16px;
-  background: rgba(226, 232, 240, 0.65);
+.user-button {
+  padding: 0 16px;
 }
 
-.user-badge strong {
+.user-button__content {
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  text-align: left;
+}
+
+.user-button__content strong {
   color: #0f172a;
   font-size: 0.95rem;
+}
+
+.user-button__content span {
+  color: #64748b;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 1100px) {
@@ -147,7 +155,7 @@ async function logout() {
   }
 
   .app-header__actions {
-    justify-content: space-between;
+    justify-content: flex-start;
   }
 }
 

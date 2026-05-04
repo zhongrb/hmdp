@@ -15,6 +15,18 @@ spring:
       password: ${HMDP_REDIS_PASSWORD:}
       database: ${HMDP_REDIS_DB:0}
       timeout: 3s
+  rabbitmq:
+    host: ${HMDP_RABBITMQ_HOST:127.0.0.1}
+    port: ${HMDP_RABBITMQ_PORT:5672}
+    username: ${HMDP_RABBITMQ_USERNAME:guest}
+    password: ${HMDP_RABBITMQ_PASSWORD:guest}
+    virtual-host: ${HMDP_RABBITMQ_VHOST:/}
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    listener:
+      simple:
+        acknowledge-mode: manual
+        default-requeue-rejected: false
   jackson:
     default-property-inclusion: non_null
 #  sql:

@@ -9,9 +9,6 @@
           <h1 class="page-title">
             {{ copy.home.heroTitle }}
           </h1>
-          <p class="page-lead">
-            {{ copy.home.heroSubtitle }}
-          </p>
         </div>
 
         <div class="inline-actions">
@@ -78,7 +75,7 @@
 
     <EmptyState
       :eyebrow="copy.marketing.trustTitle"
-      title="从公开内容开始了解平台"
+      title="从公开内容开始找灵感"
       :description="copy.marketing.trustBody"
     >
       <template #actions>
@@ -110,28 +107,28 @@ import { copy } from '../constants/copy'
 const entries = computed(() => [
   {
     title: copy.nav.shops,
-    description: '先看分类、评分与人均，再决定是否深入查看商户详情。',
+    description: '看看分类、评分和人均，挑一家更适合现在想去的店。',
     action: copy.actions.goShops,
     href: '/shops',
     eyebrow: copy.labels.publicBrowse,
   },
   {
     title: copy.nav.nearby,
-    description: '支持按距离浏览附近商户，即使未授权定位也有降级提示。',
+    description: '想找离你更近的选择时，可以先看看周边有哪些热门商户。',
     action: copy.actions.goNearby,
     href: '/nearby',
     eyebrow: '地理推荐',
   },
   {
     title: copy.nav.vouchers,
-    description: '先浏览优惠活动节奏，登录后再参与抢购与签到。',
+    description: '先看看有哪些活动和价格，遇到合适的再去领券也不迟。',
     action: copy.actions.goVouchers,
     href: '/vouchers',
     eyebrow: copy.labels.protectedFeature,
   },
   {
     title: copy.nav.blogs,
-    description: '看看大家最近的探店内容和热榜动态，快速建立消费判断。',
+    description: '看看大家最近吃了什么、玩了什么，给自己找点灵感。',
     action: copy.actions.exploreBlogs,
     href: '/blogs',
     eyebrow: '真实内容',

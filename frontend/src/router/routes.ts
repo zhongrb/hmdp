@@ -10,6 +10,7 @@ export const publicRouteNames = [
 ] as const
 
 export const protectedRouteNames = [
+  'profile',
   'blog-publish',
   'common-follow',
 ] as const
@@ -56,6 +57,12 @@ export const routes = [
     name: 'hot-blog-list',
     component: () => import('../views/HotBlogListView.vue'),
     meta: { requiresAuth: false, title: '点赞热榜' },
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('../views/ProfileView.vue'),
+    meta: { requiresAuth: true, title: '个人信息' },
   },
   {
     path: '/blogs/publish',

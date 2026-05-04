@@ -108,6 +108,13 @@
       v-model="showLoginPrompt"
       @confirm="goToLogin"
     />
+
+    <ActionResultModal
+      v-model="showClaimResult"
+      :title="claimResultTitle"
+      :message="claimResultMessage"
+      :tone="claimResultTone"
+    />
   </main>
 </template>
 
@@ -115,6 +122,7 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { claimSeckillVoucher, fetchSeckillVouchers, type Voucher } from '../api/voucher'
+import ActionResultModal from '../components/ActionResultModal.vue'
 import AppSectionHeader from '../components/AppSectionHeader.vue'
 import BaseButton from '../components/BaseButton.vue'
 import EmptyState from '../components/EmptyState.vue'
@@ -134,6 +142,10 @@ const errorMessage = ref('')
 const signMessage = ref('')
 const signMessageTone = ref<'neutral' | 'error' | 'success'>('neutral')
 const showLoginPrompt = ref(false)
+const showClaimResult = ref(false)
+const claimResultTitle = ref('')
+const claimResultMessage = ref('')
+const claimResultTone = ref<'success' | 'error'>('success')
 const claimingVoucherId = ref<number | null>(null)
 const vouchers = ref<Voucher[]>([])
 
@@ -173,15 +185,19 @@ async function handleClaim(voucherId: number) {
     return
   }
   claimingVoucherId.value = voucherId
-  signMessage.value = ''
+  showClaimResult.value = false
   try {
     await claimSeckillVoucher(voucherId)
-    signMessageTone.value = 'success'
-    signMessage.value = copy.vouchers.claimSuccess
+    claimResultTone.value = 'success'
+    claimResultTitle.value = '抢券成功'
+    claimResultMessage.value = copy.vouchers.claimSuccess
+    showClaimResult.value = true
     await loadVouchers()
   } catch (error: any) {
-    signMessageTone.value = 'error'
-    signMessage.value = error.response?.data?.message ?? copy.errors.network
+    claimResultTone.value = 'error'
+    claimResultTitle.value = '抢券失败'
+    claimResultMessage.value = error.response?.data?.message ?? copy.errors.network
+    showClaimResult.value = true
   } finally {
     claimingVoucherId.value = null
   }
